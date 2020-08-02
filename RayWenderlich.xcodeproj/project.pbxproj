@@ -7,23 +7,71 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F252C4CD24D70C4B00E543A0 /* BookmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */; };
 		F28F4A1124D5DD0D00313EA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */; };
 		F28F4A1324D5DD0D00313EA9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */; };
-		F28F4A1524D5DD0D00313EA9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1424D5DD0D00313EA9 /* ViewController.swift */; };
-		F28F4A1824D5DD0D00313EA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F28F4A1624D5DD0D00313EA9 /* Main.storyboard */; };
+		F28F4A1524D5DD0D00313EA9 /* LibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1424D5DD0D00313EA9 /* LibraryVC.swift */; };
 		F28F4A1A24D5DD0F00313EA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F28F4A1924D5DD0F00313EA9 /* Assets.xcassets */; };
 		F28F4A1D24D5DD0F00313EA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F28F4A1B24D5DD0F00313EA9 /* LaunchScreen.storyboard */; };
+		F28F4A2924D5E03C00313EA9 /* RWTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A2824D5E03C00313EA9 /* RWTabBarController.swift */; };
+		F28F4A2C24D5E27A00313EA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A2B24D5E27A00313EA9 /* Constants.swift */; };
+		F28F4A2E24D5E3C800313EA9 /* DownloadsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A2D24D5E3C800313EA9 /* DownloadsVC.swift */; };
+		F28F4A3024D5E3D900313EA9 /* MyTutorialsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A2F24D5E3D900313EA9 /* MyTutorialsVC.swift */; };
+		F28F4A3424D5E8AB00313EA9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3324D5E8AB00313EA9 /* Item.swift */; };
+		F28F4A3624D5E8B300313EA9 /* Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3524D5E8B300313EA9 /* Attribute.swift */; };
+		F28F4A3824D5E9E100313EA9 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3724D5E9E100313EA9 /* Results.swift */; };
+		F28F4A3A24D5EAAE00313EA9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3924D5EAAE00313EA9 /* NetworkManager.swift */; };
+		F28F4A3C24D5EB1D00313EA9 /* RWError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3B24D5EB1D00313EA9 /* RWError.swift */; };
+		F28F4A3F24D621AC00313EA9 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A3E24D621AC00313EA9 /* ItemCell.swift */; };
+		F28F4A4224D6223800313EA9 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4124D6223800313EA9 /* UIView+Ext.swift */; };
+		F28F4A4424D6246C00313EA9 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4324D6246C00313EA9 /* UIHelper.swift */; };
+		F28F4A4824D6276400313EA9 /* RWLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4724D6276400313EA9 /* RWLabel.swift */; };
+		F28F4A4A24D6277000313EA9 /* RWImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4924D6277000313EA9 /* RWImageView.swift */; };
+		F28F4A4C24D6396200313EA9 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4B24D6396200313EA9 /* Date+Ext.swift */; };
+		F28F4A4E24D6397500313EA9 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4D24D6397500313EA9 /* String+Ext.swift */; };
+		F28F4A5024D640DB00313EA9 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A4F24D640DB00313EA9 /* Int+Ext.swift */; };
+		F28F4A5224D649CA00313EA9 /* ItemDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5124D649CA00313EA9 /* ItemDetailVC.swift */; };
+		F28F4A5524D64CBB00313EA9 /* CourseInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */; };
+		F28F4A5724D64CCD00313EA9 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5624D64CCD00313EA9 /* UIViewController+Ext.swift */; };
+		F28F4A5924D64FB600313EA9 /* PlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5824D64FB600313EA9 /* PlayerVC.swift */; };
+		F28F4A5C24D653D700313EA9 /* RWButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5B24D653D700313EA9 /* RWButton.swift */; };
+		F28F4A5E24D65EA600313EA9 /* FiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5D24D65EA600313EA9 /* FiltersVC.swift */; };
+		F28F4A6024D686ED00313EA9 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A5F24D686ED00313EA9 /* PersistenceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksVC.swift; sourceTree = "<group>"; };
 		F28F4A0D24D5DD0D00313EA9 /* RayWenderlich.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayWenderlich.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F28F4A1424D5DD0D00313EA9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		F28F4A1724D5DD0D00313EA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F28F4A1424D5DD0D00313EA9 /* LibraryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryVC.swift; sourceTree = "<group>"; };
 		F28F4A1924D5DD0F00313EA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F28F4A1C24D5DD0F00313EA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F28F4A1E24D5DD0F00313EA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F28F4A2824D5E03C00313EA9 /* RWTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RWTabBarController.swift; sourceTree = "<group>"; };
+		F28F4A2B24D5E27A00313EA9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F28F4A2D24D5E3C800313EA9 /* DownloadsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsVC.swift; sourceTree = "<group>"; };
+		F28F4A2F24D5E3D900313EA9 /* MyTutorialsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTutorialsVC.swift; sourceTree = "<group>"; };
+		F28F4A3324D5E8AB00313EA9 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		F28F4A3524D5E8B300313EA9 /* Attribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attribute.swift; sourceTree = "<group>"; };
+		F28F4A3724D5E9E100313EA9 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
+		F28F4A3924D5EAAE00313EA9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		F28F4A3B24D5EB1D00313EA9 /* RWError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RWError.swift; sourceTree = "<group>"; };
+		F28F4A3E24D621AC00313EA9 /* ItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
+		F28F4A4124D6223800313EA9 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
+		F28F4A4324D6246C00313EA9 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		F28F4A4724D6276400313EA9 /* RWLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RWLabel.swift; sourceTree = "<group>"; };
+		F28F4A4924D6277000313EA9 /* RWImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RWImageView.swift; sourceTree = "<group>"; };
+		F28F4A4B24D6396200313EA9 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		F28F4A4D24D6397500313EA9 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		F28F4A4F24D640DB00313EA9 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+		F28F4A5124D649CA00313EA9 /* ItemDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailVC.swift; sourceTree = "<group>"; };
+		F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseInfoVC.swift; sourceTree = "<group>"; };
+		F28F4A5624D64CCD00313EA9 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		F28F4A5824D64FB600313EA9 /* PlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerVC.swift; sourceTree = "<group>"; };
+		F28F4A5B24D653D700313EA9 /* RWButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RWButton.swift; sourceTree = "<group>"; };
+		F28F4A5D24D65EA600313EA9 /* FiltersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersVC.swift; sourceTree = "<group>"; };
+		F28F4A5F24D686ED00313EA9 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +104,143 @@
 		F28F4A0F24D5DD0D00313EA9 /* RayWenderlich */ = {
 			isa = PBXGroup;
 			children = (
-				F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */,
-				F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */,
-				F28F4A1424D5DD0D00313EA9 /* ViewController.swift */,
-				F28F4A1624D5DD0D00313EA9 /* Main.storyboard */,
-				F28F4A1924D5DD0F00313EA9 /* Assets.xcassets */,
-				F28F4A1B24D5DD0F00313EA9 /* LaunchScreen.storyboard */,
+				F28F4A2A24D5E26E00313EA9 /* Utilities */,
+				F28F4A3124D5E56000313EA9 /* Managers */,
+				F28F4A4024D6222700313EA9 /* Extensions */,
+				F28F4A3224D5E89E00313EA9 /* Models */,
+				F28F4A3D24D6217000313EA9 /* Cells */,
+				F28F4A2624D5E00D00313EA9 /* Custom Views */,
+				F28F4A2524D5E00200313EA9 /* Screens */,
+				F28F4A2424D5DFEE00313EA9 /* Support */,
 				F28F4A1E24D5DD0F00313EA9 /* Info.plist */,
 			);
 			path = RayWenderlich;
+			sourceTree = "<group>";
+		};
+		F28F4A2424D5DFEE00313EA9 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */,
+				F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */,
+				F28F4A1924D5DD0F00313EA9 /* Assets.xcassets */,
+				F28F4A1B24D5DD0F00313EA9 /* LaunchScreen.storyboard */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		F28F4A2524D5E00200313EA9 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A1424D5DD0D00313EA9 /* LibraryVC.swift */,
+				F28F4A2D24D5E3C800313EA9 /* DownloadsVC.swift */,
+				F28F4A2F24D5E3D900313EA9 /* MyTutorialsVC.swift */,
+				F28F4A5124D649CA00313EA9 /* ItemDetailVC.swift */,
+				F28F4A5D24D65EA600313EA9 /* FiltersVC.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		F28F4A2624D5E00D00313EA9 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A2724D5E01400313EA9 /* TabBarController */,
+				F28F4A5324D64BF500313EA9 /* View Controllers */,
+				F28F4A4624D626E000313EA9 /* Image Views */,
+				F28F4A5A24D6514800313EA9 /* Buttons */,
+				F28F4A4524D626D700313EA9 /* Labels */,
+			);
+			path = "Custom Views";
+			sourceTree = "<group>";
+		};
+		F28F4A2724D5E01400313EA9 /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A2824D5E03C00313EA9 /* RWTabBarController.swift */,
+			);
+			path = TabBarController;
+			sourceTree = "<group>";
+		};
+		F28F4A2A24D5E26E00313EA9 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A2B24D5E27A00313EA9 /* Constants.swift */,
+				F28F4A3B24D5EB1D00313EA9 /* RWError.swift */,
+				F28F4A4324D6246C00313EA9 /* UIHelper.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		F28F4A3124D5E56000313EA9 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A3924D5EAAE00313EA9 /* NetworkManager.swift */,
+				F28F4A5F24D686ED00313EA9 /* PersistenceManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		F28F4A3224D5E89E00313EA9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A3324D5E8AB00313EA9 /* Item.swift */,
+				F28F4A3524D5E8B300313EA9 /* Attribute.swift */,
+				F28F4A3724D5E9E100313EA9 /* Results.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F28F4A3D24D6217000313EA9 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A3E24D621AC00313EA9 /* ItemCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		F28F4A4024D6222700313EA9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A4124D6223800313EA9 /* UIView+Ext.swift */,
+				F28F4A4B24D6396200313EA9 /* Date+Ext.swift */,
+				F28F4A4D24D6397500313EA9 /* String+Ext.swift */,
+				F28F4A4F24D640DB00313EA9 /* Int+Ext.swift */,
+				F28F4A5624D64CCD00313EA9 /* UIViewController+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F28F4A4524D626D700313EA9 /* Labels */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A4724D6276400313EA9 /* RWLabel.swift */,
+			);
+			path = Labels;
+			sourceTree = "<group>";
+		};
+		F28F4A4624D626E000313EA9 /* Image Views */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A4924D6277000313EA9 /* RWImageView.swift */,
+			);
+			path = "Image Views";
+			sourceTree = "<group>";
+		};
+		F28F4A5324D64BF500313EA9 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */,
+				F28F4A5824D64FB600313EA9 /* PlayerVC.swift */,
+				F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		F28F4A5A24D6514800313EA9 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A5B24D653D700313EA9 /* RWButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,7 +302,6 @@
 			files = (
 				F28F4A1D24D5DD0F00313EA9 /* LaunchScreen.storyboard in Resources */,
 				F28F4A1A24D5DD0F00313EA9 /* Assets.xcassets in Resources */,
-				F28F4A1824D5DD0D00313EA9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,23 +312,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F28F4A1524D5DD0D00313EA9 /* ViewController.swift in Sources */,
+				F28F4A3F24D621AC00313EA9 /* ItemCell.swift in Sources */,
+				F28F4A4824D6276400313EA9 /* RWLabel.swift in Sources */,
+				F28F4A3024D5E3D900313EA9 /* MyTutorialsVC.swift in Sources */,
+				F28F4A2C24D5E27A00313EA9 /* Constants.swift in Sources */,
+				F28F4A2924D5E03C00313EA9 /* RWTabBarController.swift in Sources */,
+				F28F4A5724D64CCD00313EA9 /* UIViewController+Ext.swift in Sources */,
+				F252C4CD24D70C4B00E543A0 /* BookmarksVC.swift in Sources */,
+				F28F4A4224D6223800313EA9 /* UIView+Ext.swift in Sources */,
+				F28F4A4A24D6277000313EA9 /* RWImageView.swift in Sources */,
+				F28F4A2E24D5E3C800313EA9 /* DownloadsVC.swift in Sources */,
+				F28F4A5224D649CA00313EA9 /* ItemDetailVC.swift in Sources */,
+				F28F4A3A24D5EAAE00313EA9 /* NetworkManager.swift in Sources */,
+				F28F4A4C24D6396200313EA9 /* Date+Ext.swift in Sources */,
+				F28F4A3624D5E8B300313EA9 /* Attribute.swift in Sources */,
+				F28F4A4424D6246C00313EA9 /* UIHelper.swift in Sources */,
+				F28F4A3424D5E8AB00313EA9 /* Item.swift in Sources */,
+				F28F4A6024D686ED00313EA9 /* PersistenceManager.swift in Sources */,
+				F28F4A5C24D653D700313EA9 /* RWButton.swift in Sources */,
+				F28F4A5924D64FB600313EA9 /* PlayerVC.swift in Sources */,
+				F28F4A4E24D6397500313EA9 /* String+Ext.swift in Sources */,
+				F28F4A3824D5E9E100313EA9 /* Results.swift in Sources */,
+				F28F4A5024D640DB00313EA9 /* Int+Ext.swift in Sources */,
+				F28F4A5E24D65EA600313EA9 /* FiltersVC.swift in Sources */,
+				F28F4A1524D5DD0D00313EA9 /* LibraryVC.swift in Sources */,
 				F28F4A1124D5DD0D00313EA9 /* AppDelegate.swift in Sources */,
+				F28F4A5524D64CBB00313EA9 /* CourseInfoVC.swift in Sources */,
 				F28F4A1324D5DD0D00313EA9 /* SceneDelegate.swift in Sources */,
+				F28F4A3C24D5EB1D00313EA9 /* RWError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F28F4A1624D5DD0D00313EA9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F28F4A1724D5DD0D00313EA9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		F28F4A1B24D5DD0F00313EA9 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -296,7 +488,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.soriagc.RayWenderlich;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -315,7 +507,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.soriagc.RayWenderlich;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
