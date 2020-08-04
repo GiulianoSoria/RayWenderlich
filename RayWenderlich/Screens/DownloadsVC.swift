@@ -23,11 +23,15 @@ class DownloadsVC: UIViewController {
         configureViewController()
         configureCollectionView()
         configureDataSource()
-        getDownloads()
+        configureSearchController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        updateData(with: DownloadsVC.items)
+        getDownloads()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        updateDownloads(with: DownloadsVC.items)
     }
     
     func configureViewController() {
@@ -56,6 +60,19 @@ class DownloadsVC: UIViewController {
         })
     }
     
+    func configureSearchController() {
+        let searchController = UISearchController()
+        searchController.searchBar.showsBookmarkButton = true
+        searchController.searchBar.setImage(Images.filter, for: .bookmark, state: .normal)
+        
+        searchController.searchBar.placeholder = "Search..."
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
+        
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+    }
+    
     func updateData(with items: [SavedItem]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
         snapshot.appendSections([.main])
@@ -69,6 +86,7 @@ class DownloadsVC: UIViewController {
             
             switch result {
             case .success(let downloads):
+                DownloadsVC.items = downloads
                 self.updateData(with: downloads)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
@@ -76,6 +94,16 @@ class DownloadsVC: UIViewController {
         }
     }
     
+    func updateDownloads(with items: [SavedItem]) {
+        for item in items {
+            PersistenceManager.updateItems(for: Keys.downloads, with: item, actionType: .add) { error in
+                guard let _ = error else {
+                    print("Successfully updated persisted downloads!")
+                    return
+                }
+            }
+        }
+    }
 }
 
 extension DownloadsVC: UICollectionViewDelegate {
@@ -92,5 +120,28 @@ extension DownloadsVC: UICollectionViewDelegateFlowLayout {
         let height: CGFloat = 170
         
         return CGSize(width: width, height: height)
+    }
+}
+
+extension DownloadsVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+            filteredItems.removeAll()
+            updateData(with: DownloadsVC.items)
+            return
+        }
+        
+        filteredItems = DownloadsVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
+        updateData(with: filteredItems)
+    }
+}
+
+extension DownloadsVC: UISearchBarDelegate {
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        let destVC = FiltersVC()
+        destVC.title = "Filters"
+        
+        let navController = UINavigationController(rootViewController: destVC)
+        present(navController, animated: true)
     }
 }

@@ -31,4 +31,8 @@ class RWButton: UIButton {
         titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    func set(tintColor: UIColor) {
+        self.tintColor = tintColor
+    }
 }

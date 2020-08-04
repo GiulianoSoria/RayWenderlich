@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVKit
 
 class PlayerVC: UIViewController {
     
@@ -42,12 +43,28 @@ class PlayerVC: UIViewController {
         view.addSubview(playButton)
         playButton.alpha = 1
         
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
             playButton.centerYAnchor.constraint(equalTo: playerImageView.centerYAnchor),
             playButton.centerXAnchor.constraint(equalTo: playerImageView.centerXAnchor),
             playButton.heightAnchor.constraint(equalToConstant: 50),
             playButton.widthAnchor.constraint(equalTo: playButton.heightAnchor)
         ])
+    }
+    
+    @objc func playButtonTapped() {
+        let videoURL = URL(string: "https://i.imgur.com/V6VfD9G.mp4")
+        let player = AVPlayer(url: videoURL!)
+        
+        let playerVC = AVPlayerViewController()
+        playerVC.allowsPictureInPicturePlayback = true
+        playerVC.entersFullScreenWhenPlaybackBegins = true
+        playerVC.player = player
+        
+        present(playerVC, animated: true) {
+            playerVC.player!.play()
+        }
     }
     
 }

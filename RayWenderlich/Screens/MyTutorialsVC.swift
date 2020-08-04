@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol MyTutorialsVCDelegate: class {
+//    var filteredItems: [SavedItem] { get set }
+    func updateData(with items: [SavedItem])
+}
+
 class MyTutorialsVC: UIViewController {
+    
+    weak var delegate: MyTutorialsVCDelegate!
     
     var segmentedControl: UISegmentedControl!
     var inProgressView = UIView()
@@ -15,14 +22,20 @@ class MyTutorialsVC: UIViewController {
     var bookmarksView = UIView()
     
     static var bookmarkedItems: [SavedItem] = []
+    var filteredItems : [SavedItem] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureViewController()
-        configureBookmarksVC()
         configureSegmentedControl()
         layoutUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        configureBookmarksVC()
+        configureInProgressVC()
+        configureCompletedVC()
     }
     
     func configureViewController() {
@@ -52,12 +65,30 @@ class MyTutorialsVC: UIViewController {
             bookmarksView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
             bookmarksView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bookmarksView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bookmarksView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            bookmarksView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            inProgressView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+            inProgressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            inProgressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            inProgressView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            completedView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+            completedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            completedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            completedView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
     func configureBookmarksVC() {
         self.add(childVC: BookmarksVC(with: MyTutorialsVC.bookmarkedItems), to: self.bookmarksView)
+    }
+    
+    func configureInProgressVC() {
+        self.add(childVC: InProgressVC(), to: self.inProgressView)
+    }
+    
+    func configureCompletedVC() {
+        self.add(childVC: CompletedVC(), to: self.completedView)
     }
     
     func configureSegmentedControl() {
@@ -93,5 +124,28 @@ class MyTutorialsVC: UIViewController {
             completedView.isHidden = true
             bookmarksView.isHidden = false
         }
+    }
+}
+
+extension MyTutorialsVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+            filteredItems.removeAll()
+            delegate.updateData(with: BookmarksVC.items)
+            return
+        }
+        
+        filteredItems = BookmarksVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
+        delegate.updateData(with: filteredItems)
+    }
+}
+
+extension MyTutorialsVC: UISearchBarDelegate {
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        let destVC = FiltersVC()
+        destVC.title = "Filters"
+        
+        let navController = UINavigationController(rootViewController: destVC)
+        present(navController, animated: true)
     }
 }

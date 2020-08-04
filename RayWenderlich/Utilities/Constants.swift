@@ -27,4 +27,5 @@ struct Images {
     static let play = UIImage(systemName: "play.rectangle.fill")
     static let close = UIImage(systemName: "multiply")
     static let settings = UIImage(systemName: "gearshape.fill")
+    static let sort = UIImage(systemName: "arrow.up.arrow.down")
 }

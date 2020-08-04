@@ -7,9 +7,16 @@
 
 import UIKit
 
+protocol FiltersVCDelegate: class {
+    func updateUI(with filter: String)
+}
+
 class FiltersVC: UIViewController {
     
-    var contentType = ["Article", "Collection", "Both"]
+    weak var delegate: FiltersVCDelegate!
+    
+    var contentType: [ContentType] = []
+    var selectedRow: SelectedRow!
     
     var tableView: UITableView!
     
@@ -20,6 +27,10 @@ class FiltersVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        contentType.append(ContentType(type: "Article", isSelected: false))
+        contentType.append(ContentType(type: "Collection", isSelected: false))
+        contentType.append(ContentType(type: "All", isSelected: true))
 
         configureViewController()
         configureTableView()
@@ -63,6 +74,9 @@ class FiltersVC: UIViewController {
             applyButton
         )
         
+        clearButton.addTarget(self, action: #selector(clearButtonTapped), for: .touchUpInside)
+        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
+        
         let padding: CGFloat = 15
         
         NSLayoutConstraint.activate([
@@ -77,17 +91,36 @@ class FiltersVC: UIViewController {
             applyButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
+    @objc func clearButtonTapped() {
+        delegate.updateUI(with: "Both")
+        dismiss(animated: true)
+    }
+    
+    @objc func applyButtonTapped() {
+        delegate.updateUI(with: selectedRow.type.type)
+        dismiss(animated: true)
+    }
+    
+    func indexPathIsSelected(_ indexPath: IndexPath) -> Bool {
+        let selectedIndexPath = selectedRow.indexPath
+        
+        if selectedIndexPath.row == indexPath.row {
+            return true
+        }
+        
+        return false
+    }
+    
+    func updateIndexPathSelected(for type: ContentType, _ indexPath: IndexPath) {
+        selectedRow = SelectedRow(type: type, indexPath: indexPath)
+    }
 }
 
 extension FiltersVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        if cell.accessoryType == .checkmark {
-            cell.accessoryType = .none
-        } else {
-            cell.accessoryType = .checkmark
-        }
+        updateIndexPathSelected(for: contentType[indexPath.row], indexPath)
     }
 }
 
@@ -98,7 +131,11 @@ extension FiltersVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = contentType[indexPath.row]
+        let type = contentType[indexPath.row]
+        
+        if type.isSelected { selectedRow = SelectedRow(type: type, indexPath: indexPath) }
+        
+        cell.textLabel?.text = type.type
         cell.backgroundColor = .systemBackground
         
         return cell

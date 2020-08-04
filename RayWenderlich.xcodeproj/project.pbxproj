@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		F252C4CD24D70C4B00E543A0 /* BookmarksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */; };
+		F28668CD24D882530024353B /* ContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28668CC24D882530024353B /* ContentType.swift */; };
+		F28668D124D8AFC40024353B /* InProgressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28668D024D8AFC40024353B /* InProgressVC.swift */; };
+		F28668D324D8AFCD0024353B /* CompletedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28668D224D8AFCD0024353B /* CompletedVC.swift */; };
 		F28F4A1124D5DD0D00313EA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */; };
 		F28F4A1324D5DD0D00313EA9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */; };
 		F28F4A1524D5DD0D00313EA9 /* LibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28F4A1424D5DD0D00313EA9 /* LibraryVC.swift */; };
@@ -41,6 +44,9 @@
 
 /* Begin PBXFileReference section */
 		F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksVC.swift; sourceTree = "<group>"; };
+		F28668CC24D882530024353B /* ContentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentType.swift; sourceTree = "<group>"; };
+		F28668D024D8AFC40024353B /* InProgressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InProgressVC.swift; sourceTree = "<group>"; };
+		F28668D224D8AFCD0024353B /* CompletedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedVC.swift; sourceTree = "<group>"; };
 		F28F4A0D24D5DD0D00313EA9 /* RayWenderlich.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayWenderlich.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F28F4A1024D5DD0D00313EA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F28F4A1224D5DD0D00313EA9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -185,6 +191,7 @@
 				F28F4A3324D5E8AB00313EA9 /* Item.swift */,
 				F28F4A3524D5E8B300313EA9 /* Attribute.swift */,
 				F28F4A3724D5E9E100313EA9 /* Results.swift */,
+				F28668CC24D882530024353B /* ContentType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -231,6 +238,8 @@
 				F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */,
 				F28F4A5824D64FB600313EA9 /* PlayerVC.swift */,
 				F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */,
+				F28668D024D8AFC40024353B /* InProgressVC.swift */,
+				F28668D224D8AFCD0024353B /* CompletedVC.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -318,9 +327,11 @@
 				F28F4A2C24D5E27A00313EA9 /* Constants.swift in Sources */,
 				F28F4A2924D5E03C00313EA9 /* RWTabBarController.swift in Sources */,
 				F28F4A5724D64CCD00313EA9 /* UIViewController+Ext.swift in Sources */,
+				F28668D124D8AFC40024353B /* InProgressVC.swift in Sources */,
 				F252C4CD24D70C4B00E543A0 /* BookmarksVC.swift in Sources */,
 				F28F4A4224D6223800313EA9 /* UIView+Ext.swift in Sources */,
 				F28F4A4A24D6277000313EA9 /* RWImageView.swift in Sources */,
+				F28668D324D8AFCD0024353B /* CompletedVC.swift in Sources */,
 				F28F4A2E24D5E3C800313EA9 /* DownloadsVC.swift in Sources */,
 				F28F4A5224D649CA00313EA9 /* ItemDetailVC.swift in Sources */,
 				F28F4A3A24D5EAAE00313EA9 /* NetworkManager.swift in Sources */,
@@ -331,6 +342,7 @@
 				F28F4A6024D686ED00313EA9 /* PersistenceManager.swift in Sources */,
 				F28F4A5C24D653D700313EA9 /* RWButton.swift in Sources */,
 				F28F4A5924D64FB600313EA9 /* PlayerVC.swift in Sources */,
+				F28668CD24D882530024353B /* ContentType.swift in Sources */,
 				F28F4A4E24D6397500313EA9 /* String+Ext.swift in Sources */,
 				F28F4A3824D5E9E100313EA9 /* Results.swift in Sources */,
 				F28F4A5024D640DB00313EA9 /* Int+Ext.swift in Sources */,

@@ -15,9 +15,7 @@ class ItemCell: UICollectionViewCell {
     var titleLabel = RWLabel(textAlignment: .left, fontSize: 20, weight: .bold, textColor: .label)
     var technologyLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .light, textColor: .secondaryLabel)
     var descriptionLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
-    var dateLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .light, textColor: .secondaryLabel)
-    var contentTypeLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .light, textColor: .secondaryLabel)
-    var durationLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .light, textColor: .secondaryLabel)
+    var footerLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .light, textColor: .secondaryLabel)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,9 +39,7 @@ class ItemCell: UICollectionViewCell {
         descriptionLabel.text = item.attributes.descriptionPlainText
         descriptionLabel.numberOfLines = 2
         
-        dateLabel.text = item.attributes.releasedAt.convertToDate()?.convertToMonthDayYearFormat()
-        contentTypeLabel.text = "• \(item.attributes.contentType.localizedCapitalized)"
-        durationLabel.text = item.attributes.duration.convertToDuration()
+        footerLabel.text = "\(item.attributes.releasedAt.convertToDate()!.convertToMonthDayYearFormat()) • \(item.attributes.contentType.localizedCapitalized) \(item.attributes.duration.convertToDuration())"
     }
     
     func setPersistedCell(with item: SavedItem) {
@@ -58,9 +54,7 @@ class ItemCell: UICollectionViewCell {
         descriptionLabel.text = item.attributes.descriptionPlainText
         descriptionLabel.numberOfLines = 2
         
-        dateLabel.text = item.attributes.releasedAt.convertToDate()?.convertToMonthDayYearFormat()
-        contentTypeLabel.text = "• \(item.attributes.contentType.localizedCapitalized)"
-        durationLabel.text = item.attributes.duration.convertToDuration()
+        footerLabel.text = "\(item.attributes.releasedAt.convertToDate()!.convertToMonthDayYearFormat()) • \(item.attributes.contentType.localizedCapitalized) \(item.attributes.duration.convertToDuration())"
     }
     
     private func configure() {
@@ -69,9 +63,7 @@ class ItemCell: UICollectionViewCell {
             titleLabel,
             technologyLabel,
             descriptionLabel,
-            dateLabel,
-            contentTypeLabel,
-            durationLabel
+            footerLabel
         )
         
         let padding: CGFloat = 10
@@ -97,21 +89,10 @@ class ItemCell: UICollectionViewCell {
             descriptionLabel.trailingAnchor.constraint(equalTo: artworkImageView.trailingAnchor),
             descriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 18),
 
-            dateLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: padding),
-            dateLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
-            dateLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 80),
-            dateLabel.heightAnchor.constraint(equalToConstant: 18),
-
-            contentTypeLabel.topAnchor.constraint(equalTo: dateLabel.topAnchor),
-            contentTypeLabel.leadingAnchor.constraint(equalTo: dateLabel.trailingAnchor, constant: 2),
-            contentTypeLabel.widthAnchor.constraint(equalToConstant: 75),
-            contentTypeLabel.heightAnchor.constraint(equalToConstant: 18),
-
-            durationLabel.topAnchor.constraint(equalTo: dateLabel.topAnchor),
-            durationLabel.leadingAnchor.constraint(equalTo: contentTypeLabel.trailingAnchor, constant: 2),
-            durationLabel.trailingAnchor.constraint(equalTo: artworkImageView.trailingAnchor),
-            durationLabel.heightAnchor.constraint(equalToConstant: 18)
-            
+            footerLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: padding),
+            footerLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            footerLabel.trailingAnchor.constraint(equalTo: artworkImageView.trailingAnchor),
+            footerLabel.heightAnchor.constraint(equalToConstant: 18),
         ])
     }
     

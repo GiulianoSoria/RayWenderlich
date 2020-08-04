@@ -18,9 +18,6 @@ class CourseInfoVC: UIViewController {
     var bookmarkButton = RWButton(title: nil, backgroundImage: Images.bookmark, backgroundColor: .systemBackground, tintColor: .secondaryLabel)
     var descriptionLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
     var contributorLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
-    
-    var isDownloaded: Bool = false
-    var isBookmarked: Bool = false
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -44,6 +41,9 @@ class CourseInfoVC: UIViewController {
         
         contributorLabel.text = "By \(item.attributes.contributorString)"
         contributorLabel.numberOfLines = 3
+        
+        downloadButton.set(tintColor: item.isDownloaded ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
+        bookmarkButton.set(tintColor: item.isBookmarked ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
     }
     
     override func viewDidLoad() {
@@ -108,16 +108,16 @@ class CourseInfoVC: UIViewController {
     }
 
     @objc func downloadButtonTapped() {
-        if !isDownloaded {
+        if !item.isDownloaded {
             DownloadsVC.items.append(self.item)
             downloadButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
+            item.isDownloaded = true
             addToDownloads(with: item)
-            isDownloaded = true
         } else {
-            DownloadsVC.items.removeAll { $0.attributes.name == item.attributes.name }
+            DownloadsVC.items.removeAll { $0.id == item.id }
             downloadButton.tintColor = .secondaryLabel
+            item.isDownloaded = false
             removeFromDownloads(with: item)
-            isDownloaded = false
         }
     }
     
@@ -146,16 +146,16 @@ class CourseInfoVC: UIViewController {
     }
     
     @objc func bookmarkButtonTapped() {
-        if !isBookmarked {
+        if !item.isBookmarked {
             MyTutorialsVC.bookmarkedItems.append(self.item)
             bookmarkButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
+            item.isBookmarked = true
             addToBookmarks(with: item)
-            isBookmarked = true
         } else {
             MyTutorialsVC.bookmarkedItems.removeAll { $0.id == item.id }
             bookmarkButton.tintColor = .secondaryLabel
+            item.isBookmarked = false
             removeFromBookmarks(with: item)
-            isBookmarked = false
         }
     }
     

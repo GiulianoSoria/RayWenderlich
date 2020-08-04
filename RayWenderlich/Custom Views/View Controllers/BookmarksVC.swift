@@ -15,7 +15,7 @@ class BookmarksVC: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Section, SavedItem>!
     
     static var items: [SavedItem] = []
-    var filteredItems: [Item] = []
+    var filteredItems: [SavedItem] = []
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -27,7 +27,7 @@ class BookmarksVC: UIViewController {
     
     convenience init(with items: [SavedItem]) {
         self.init(nibName: nil, bundle: nil)
-        BookmarksVC.items = items
+        BookmarksVC.items = MyTutorialsVC.bookmarkedItems
     }
 
     override func viewDidLoad() {
@@ -40,11 +40,12 @@ class BookmarksVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        updateData(with: BookmarksVC.items)
+        getBookmarks()
     }
     
     func configureViewController() {
         view.backgroundColor = .systemBackground
+        
     }
     
     func configureCollectionView() {
@@ -67,22 +68,27 @@ class BookmarksVC: UIViewController {
         })
     }
     
-    func updateData(with items: [SavedItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(items)
-        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
-    }
-    
     func getBookmarks() {
         PersistenceManager.retreiveItems(for: Keys.bookmarks) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let bookmarks):
+                BookmarksVC.items = bookmarks
                 self.updateData(with: bookmarks)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
+        }
+    }
+    
+    func updateBookmarks(with items: [SavedItem]) {
+        for item in items {
+            PersistenceManager.updateItems(for: Keys.downloads, with: item, actionType: .add) { error in
+                guard let _ = error else {
+                    print("Successfully updated persisted bookmarks!")
+                    return
+                }
             }
         }
     }
@@ -106,3 +112,32 @@ extension BookmarksVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension BookmarksVC: MyTutorialsVCDelegate {
+    
+    func updateData(with items: [SavedItem]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(items)
+        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
+        updateBookmarks(with: items)
+    }
+}
+
+//extension BookmarksVC: UISearchBarDelegate {
+//
+//}
+//
+//extension BookmarksVC: UISearchResultsUpdating {
+//    func updateSearchResults(for searchController: UISearchController) {
+//        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+//            filteredItems.removeAll()
+//            updateData(with: BookmarksVC.items)
+//            return
+//        }
+//
+//        filteredItems = BookmarksVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
+//        updateData(with: filteredItems)
+//    }
+//
+//
+//}

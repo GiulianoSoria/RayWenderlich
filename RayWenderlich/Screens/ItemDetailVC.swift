@@ -31,9 +31,14 @@ class ItemDetailVC: UIViewController {
         super.viewDidLoad()
 
         configureViewController()
+        configureCourseInfoVC(with: item)
         configurePlayerVC()
-        configureCourseInfoVC()
         layoutUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getDownload()
+        getBookmark()
     }
     
     func configureViewController() {
@@ -63,8 +68,44 @@ class ItemDetailVC: UIViewController {
         self.add(childVC: PlayerVC(with: item), to: self.playerView)
     }
     
-    func configureCourseInfoVC() {
+    func configureCourseInfoVC(with item: SavedItem) {
         self.add(childVC: CourseInfoVC(with: item), to: self.courseInfoView)
+    }
+    
+    func getDownload() {
+        PersistenceManager.retreiveItems(for: Keys.downloads) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let downloads):
+                for download in downloads {
+                    if download.id == self.item.id {
+                        self.item.isDownloaded = true
+                        self.configureCourseInfoVC(with: download)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
+        }
+    }
+    
+    func getBookmark() {
+        PersistenceManager.retreiveItems(for: Keys.bookmarks) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let bookmarks):
+                for bookmark in bookmarks {
+                    if bookmark.id == self.item.id {
+                        self.item.isBookmarked = true
+                        self.configureCourseInfoVC(with: bookmark)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error!", message: error.rawValue, in: self) }
+            }
+        }
     }
 }
 

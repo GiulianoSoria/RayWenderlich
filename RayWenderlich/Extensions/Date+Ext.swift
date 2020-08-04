@@ -15,4 +15,11 @@ extension Date {
         
         return formatter.string(from: self)
     }
-}
+    
+    func convertToInt() -> Int {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyMMdd"
+        
+        return Int(formatter.string(from: self))!
+    }
+ }
