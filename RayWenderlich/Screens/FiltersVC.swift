@@ -93,7 +93,7 @@ class FiltersVC: UIViewController {
     }
     
     @objc func clearButtonTapped() {
-        delegate.updateUI(with: "Both")
+        delegate.updateUI(with: "All")
         dismiss(animated: true)
     }
     

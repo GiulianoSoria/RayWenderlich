@@ -24,6 +24,7 @@ class LibraryVC: UIViewController {
     
     var isFiltered: Bool = false
     var isSearching: Bool = false
+    var isSorted: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,7 +201,7 @@ extension LibraryVC: UICollectionViewDelegate {
         let item = activeItems[indexPath.item]
         
         let savedItem = SavedItem(id: item.id, type: item.type, attributes: item.attributes, isDownloaded: false, isBookmarked: false)
-        
+            
         let destVC = ItemDetailVC(with: savedItem)
         
         navigationController?.pushViewController(destVC, animated: true)
@@ -218,15 +219,25 @@ extension LibraryVC: UICollectionViewDelegateFlowLayout {
 
 extension LibraryVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        var activeItems: [Item] = []
+        
+        if isFiltered {
+            activeItems = filteredItems
+        } else if isSorted {
+            activeItems = sortedItems
+        } else {
+            activeItems = items
+        }
+        
         guard let filter = searchController.searchBar.text, !filter.isEmpty else {
-            filteredItems.removeAll()
+            activeItems.removeAll()
             updateData(with: items)
             isSearching = false
             return
         }
         
         isSearching = true
-        filteredItems = items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
+        filteredItems = activeItems.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
         updateData(with: filteredItems)
     }
 }
@@ -252,16 +263,18 @@ extension LibraryVC: FiltersVCDelegate {
             contentLabel.text = "All"
             isFiltered = false
             return
+        } else {
+            filteredItems.removeAll()
+            for item in items {
+                if item.attributes.contentType == filter.lowercased() {
+                    filteredItems.append(item)
+                    contentLabel.text = filter
+                    isFiltered = true
+                }
+            }
+            updateData(with: filteredItems)
         }
             
-        for item in items {
-            if item.attributes.contentType == filter.lowercased() {
-                filteredItems.append(item)
-                contentLabel.text = filter
-                isFiltered = true
-            }
-        }
         
-        updateData(with: filteredItems)
     }
 }
