@@ -9,7 +9,7 @@ import UIKit
 
 protocol MyTutorialsVCDelegate: class {
 //    var filteredItems: [SavedItem] { get set }
-    func updateData(with items: [SavedItem])
+    func updateData(with filter: [SavedItem])
 }
 
 class MyTutorialsVC: UIViewController {
@@ -22,6 +22,8 @@ class MyTutorialsVC: UIViewController {
     var bookmarksView = UIView()
     
     static var bookmarkedItems: [SavedItem] = []
+    static var completedItems: [SavedItem] = []
+    static var inProgressItems: [SavedItem] = []
     var filteredItems : [SavedItem] = []
 
     override func viewDidLoad() {
@@ -88,7 +90,7 @@ class MyTutorialsVC: UIViewController {
     }
     
     func configureCompletedVC() {
-        self.add(childVC: CompletedVC(), to: self.completedView)
+        self.add(childVC: CompletedVC(with: MyTutorialsVC.completedItems), to: self.completedView)
     }
     
     func configureSegmentedControl() {

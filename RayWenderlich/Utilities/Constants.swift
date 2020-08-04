@@ -15,6 +15,8 @@ struct EndPoints {
 enum Keys {
     static let downloads = "downloads"
     static let bookmarks = "bookmarks"
+    static let completed = "completed"
+    static let inProgress = "inProgress"
 }
 
 struct Images {
@@ -28,4 +30,8 @@ struct Images {
     static let close = UIImage(systemName: "multiply")
     static let settings = UIImage(systemName: "gearshape.fill")
     static let sort = UIImage(systemName: "arrow.up.arrow.down")
+    static let completed = UIImage(systemName: "checkmark.rectangle.fill")
+    static let removeCompleted = UIImage(systemName: "xmark.rectangle.fill")
+    static let share = UIImage(systemName: "square.and.arrow.up")
+    static let removeBookmark = UIImage(systemName: "bookmark.slash.fill")
 }

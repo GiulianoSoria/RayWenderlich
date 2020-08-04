@@ -38,6 +38,7 @@ class LibraryVC: UIViewController {
         
         fetchArticles()
         fetchVideos()
+        sortByDate()
     }
 
     func configureViewController() {
@@ -154,6 +155,8 @@ class LibraryVC: UIViewController {
     @objc func sortByPopularity() {
         let activeItems = isFiltered ? filteredItems : items
         sortedItems = activeItems.sorted { $0.attributes.popularity > $1.attributes.popularity }
+        self.items.removeAll()
+        self.items.append(contentsOf: sortedItems)
         
         updateData(with: sortedItems)
         sortButton.setTitle("Popular", for: .normal)
@@ -163,6 +166,8 @@ class LibraryVC: UIViewController {
     @objc func sortByDate() {
         let activeItems = isFiltered ? filteredItems : items
         sortedItems = activeItems.sorted { $0.attributes.releasedAt.convertToDate()!.convertToInt() > $1.attributes.releasedAt.convertToDate()!.convertToInt() }
+        self.items.removeAll()
+        self.items.append(contentsOf: sortedItems)
         
         updateData(with: sortedItems)
         sortButton.setTitle("Newest", for: .normal)

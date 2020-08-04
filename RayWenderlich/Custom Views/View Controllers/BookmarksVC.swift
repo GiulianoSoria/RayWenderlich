@@ -7,15 +7,24 @@
 
 import UIKit
 
+protocol BookmarksVCDelegate: class {
+    func updateData(on item: SavedItem)
+}
+
 class BookmarksVC: UIViewController {
 
     enum Section { case main }
+    
+    weak var delegate: BookmarksVCDelegate!
     
     var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, SavedItem>!
     
     static var items: [SavedItem] = []
     var filteredItems: [SavedItem] = []
+    
+    var isAdding: Bool = false
+    var isRemoving: Bool = false
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -66,6 +75,22 @@ class BookmarksVC: UIViewController {
             
             return cell
         })
+    }
+    
+    func updateUI(with bookmark: SavedItem) {
+        if isRemoving {
+            BookmarksVC.items.removeAll { $0.id == bookmark.id }
+        } else if isAdding {
+            BookmarksVC.items.append(bookmark)
+        }
+        updateData(on: BookmarksVC.items)
+    }
+    
+    func updateData(on bookmarks: [SavedItem]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(bookmarks)
+        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
     }
     
     func getBookmarks() {
@@ -141,3 +166,64 @@ extension BookmarksVC: MyTutorialsVCDelegate {
 //
 //
 //}
+
+extension BookmarksVC: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return nil
+    }
+        
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions -> UIMenu? in
+            let bookmark = BookmarksVC.items[indexPath.row]
+            
+            let completed = UIAction(title: "Mark as Completed", image: Images.completed) { [weak self] action in
+                guard let self = self else { return }
+                
+                PersistenceManager.updateItems(for: Keys.completed, with: bookmark, actionType: .add) { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    self.isAdding = true
+                    
+                    guard let error = error else {
+                        DispatchQueue.main.async { UIHelper.createAlertController(title: "Added!", message: "Successfully added from completed!", in: self) }
+                        self.isAdding = false
+                        return
+                    }
+                    
+                    DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+                }
+            }
+            
+            let share = UIAction(title: "Share Link", image: Images.share) { [weak self] action in
+                guard let self = self else { return }
+                
+                let activityViewController = UIActivityViewController(activityItems: [bookmark.attributes.uri], applicationActivities: nil)
+                activityViewController.popoverPresentationController?.sourceView = self.collectionView.cellForItem(at: indexPath)
+                activityViewController.isModalInPresentation = true
+                self.present(activityViewController, animated: true)
+            }
+
+            
+            let remove = UIAction(title: "Remove from Bookmarks", image: Images.removeBookmark, attributes: .destructive) { action in
+                PersistenceManager.updateItems(for: Keys.bookmarks, with: bookmark, actionType: .remove) { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    self.isRemoving = true
+                    
+                    guard let error = error else {
+                        DispatchQueue.main.async { UIHelper.createAlertController(title: "Removed!", message: "Successfully removed from bookmarks!", in: self) }
+                        self.updateUI(with: bookmark)
+                        self.isRemoving = false
+                        return
+                    }
+                    
+                    DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+                }
+            }
+            
+            return UIMenu(title: "Menu", children: [completed, share, remove])
+        }
+            
+        return configuration
+    }
+}
