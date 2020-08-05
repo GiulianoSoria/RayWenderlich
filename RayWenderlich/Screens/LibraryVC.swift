@@ -19,12 +19,17 @@ class LibraryVC: UIViewController {
     var sortButton = RWButton(title: "Newest", backgroundImage: nil, backgroundColor: .clear, tintColor: .secondaryLabel)
     
     var items: [Item] = []
+    var fetchedItems: [Item] = []
     var filteredItems: [Item] = []
     var sortedItems: [Item] = []
+    var downloadedItems: [Item] = []
+    var bookmarkedItems: [Item] = []
     
     var isFiltered: Bool = false
     var isSearching: Bool = false
     var isSorted: Bool = false
+    var isAdding: Bool = false
+    var isRemoving: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +44,12 @@ class LibraryVC: UIViewController {
         fetchArticles()
         fetchVideos()
         sortByDate()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        configureViewController()
+        getDownloads()
+        getBookmarks()
     }
 
     func configureViewController() {
@@ -156,9 +167,8 @@ class LibraryVC: UIViewController {
         let activeItems = isFiltered ? filteredItems : items
         sortedItems = activeItems.sorted { $0.attributes.popularity > $1.attributes.popularity }
         self.items.removeAll()
-        self.items.append(contentsOf: sortedItems)
-        
-        updateData(with: sortedItems)
+       
+        updateUI(with: sortedItems)
         sortButton.setTitle("Popular", for: .normal)
     }
     
@@ -167,9 +177,8 @@ class LibraryVC: UIViewController {
         let activeItems = isFiltered ? filteredItems : items
         sortedItems = activeItems.sorted { $0.attributes.releasedAt.convertToDate()!.convertToInt() > $1.attributes.releasedAt.convertToDate()!.convertToInt() }
         self.items.removeAll()
-        self.items.append(contentsOf: sortedItems)
         
-        updateData(with: sortedItems)
+        updateUI(with: sortedItems)
         sortButton.setTitle("Newest", for: .normal)
     }
     
@@ -179,6 +188,7 @@ class LibraryVC: UIViewController {
             
             switch result {
             case .success(let articles):
+                self.fetchedItems.append(contentsOf: articles.data)
                 self.updateUI(with: articles.data)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
@@ -192,9 +202,44 @@ class LibraryVC: UIViewController {
             
             switch result {
             case .success(let videos):
+                self.fetchedItems.append(contentsOf: videos.data)
                 self.updateUI(with: videos.data)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
+        }
+    }
+    
+    func getDownloads() {
+        PersistenceManager.retreiveItems(for: Keys.downloads) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let downloads):
+                for download in downloads {
+                    if !self.downloadedItems.contains(download) {
+                        self.downloadedItems.append(download)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
+        }
+    }
+    
+    func getBookmarks() {
+        PersistenceManager.retreiveItems(for: Keys.bookmarks) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let bookmarks):
+                for bookmark in bookmarks {
+                    if !self.bookmarkedItems.contains(bookmark) {
+                        self.bookmarkedItems.append(bookmark)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error!", message: error.rawValue, in: self) }
             }
         }
     }
@@ -205,7 +250,7 @@ extension LibraryVC: UICollectionViewDelegate {
         let activeItems = isSearching ? filteredItems : items
         let item = activeItems[indexPath.item]
         
-        let savedItem = SavedItem(id: item.id, type: item.type, attributes: item.attributes, isDownloaded: false, isBookmarked: false)
+        let savedItem = Item(id: item.id, type: item.type, attributes: item.attributes, isDownloaded: false, isBookmarked: false)
             
         let destVC = ItemDetailVC(with: savedItem)
         
@@ -270,16 +315,17 @@ extension LibraryVC: FiltersVCDelegate {
             return
         } else {
             filteredItems.removeAll()
+            items.removeAll()
+            items = fetchedItems
+        
             for item in items {
                 if item.attributes.contentType == filter.lowercased() {
                     filteredItems.append(item)
-                    contentLabel.text = filter
-                    isFiltered = true
                 }
             }
+            contentLabel.text = filter
+            isFiltered = true
             updateData(with: filteredItems)
         }
-            
-        
     }
 }

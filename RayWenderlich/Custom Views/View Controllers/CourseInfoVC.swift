@@ -9,13 +9,13 @@ import UIKit
 
 class CourseInfoVC: UIViewController {
     
-    var item: SavedItem!
+    var item: Item!
     
     var technologyLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
     var titleLabel = RWLabel(textAlignment: .left, fontSize: 24, weight: .bold, textColor: .label)
     var subtitleLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
-    var downloadButton = RWButton(title: nil, backgroundImage: Images.downloads, backgroundColor: .systemBackground, tintColor: .secondaryLabel)
-    var bookmarkButton = RWButton(title: nil, backgroundImage: Images.bookmark, backgroundColor: .systemBackground, tintColor: .secondaryLabel)
+    var downloadButton = RWButton(title: nil, backgroundImage: Images.downloads, backgroundColor: .clear, tintColor: .secondaryLabel)
+    var bookmarkButton = RWButton(title: nil, backgroundImage: Images.bookmark, backgroundColor: .clear, tintColor: .secondaryLabel)
     var descriptionLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
     var contributorLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
 
@@ -27,7 +27,7 @@ class CourseInfoVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with item: SavedItem) {
+    convenience init(with item: Item) {
         self.init(nibName: nil, bundle: nil)
         self.item = item
         
@@ -42,14 +42,23 @@ class CourseInfoVC: UIViewController {
         contributorLabel.text = "By \(item.attributes.contributorString)"
         contributorLabel.numberOfLines = 3
         
-        downloadButton.set(tintColor: item.isDownloaded ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
-        bookmarkButton.set(tintColor: item.isBookmarked ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
+        downloadButton.set(tintColor: item.isDownloaded! ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
+        bookmarkButton.set(tintColor: item.isBookmarked! ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureViewController()
         layoutUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateUI()
+    }
+    
+    func configureViewController() {
+        view.backgroundColor = .secondarySystemBackground
     }
     
     func layoutUI() {
@@ -106,9 +115,28 @@ class CourseInfoVC: UIViewController {
             
         ])
     }
+    
+    func updateUI() {
+        if !item.isDownloaded! {
+            downloadButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
+            item.isDownloaded = true
+        } else {
+            DownloadsVC.items.removeAll { $0.id == item.id }
+            downloadButton.tintColor = .secondaryLabel
+            item.isDownloaded = false
+        }
+        
+        if !item.isBookmarked! {
+            bookmarkButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
+            item.isBookmarked = true
+        } else {
+            bookmarkButton.tintColor = .secondaryLabel
+            item.isBookmarked = false
+        }
+    }
 
     @objc func downloadButtonTapped() {
-        if !item.isDownloaded {
+        if !item.isDownloaded! {
             DownloadsVC.items.append(self.item)
             downloadButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
             item.isDownloaded = true
@@ -121,7 +149,7 @@ class CourseInfoVC: UIViewController {
         }
     }
     
-    func addToDownloads(with download: SavedItem) {
+    func addToDownloads(with download: Item) {
         PersistenceManager.updateItems(for: Keys.downloads, with: download, actionType: .add) { [weak self] error in
             guard let self = self else { return }
             
@@ -134,8 +162,10 @@ class CourseInfoVC: UIViewController {
         }
     }
     
-    func removeFromDownloads(with download: SavedItem) {
-        PersistenceManager.updateItems(for: Keys.downloads, with: download, actionType: .remove) { error in
+    func removeFromDownloads(with download: Item) {
+        PersistenceManager.updateItems(for: Keys.downloads, with: download, actionType: .remove) { [weak self] error in
+            guard let self = self else { return }
+            
             guard let error = error else {
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Removed", message: "Successfully removed from downloads!", in: self) }
                 return
@@ -146,7 +176,7 @@ class CourseInfoVC: UIViewController {
     }
     
     @objc func bookmarkButtonTapped() {
-        if !item.isBookmarked {
+        if !item.isBookmarked! {
             MyTutorialsVC.bookmarkedItems.append(self.item)
             bookmarkButton.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
             item.isBookmarked = true
@@ -159,7 +189,7 @@ class CourseInfoVC: UIViewController {
         }
     }
     
-    func addToBookmarks(with bookmark: SavedItem) {
+    func addToBookmarks(with bookmark: Item) {
         PersistenceManager.updateItems(for: Keys.bookmarks, with: bookmark, actionType: .add) { [weak self] error in
             guard let self = self else { return }
             
@@ -172,8 +202,10 @@ class CourseInfoVC: UIViewController {
         }
     }
     
-    func removeFromBookmarks(with bookmark: SavedItem) {
-        PersistenceManager.updateItems(for: Keys.bookmarks, with: bookmark, actionType: .remove) { error in
+    func removeFromBookmarks(with bookmark: Item) {
+        PersistenceManager.updateItems(for: Keys.bookmarks, with: bookmark, actionType: .remove) { [weak self] error in
+            guard let self = self else { return }
+            
             guard let error = error else {
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Removed", message: "Successfully removed from bookmarks!", in: self) }
                 return

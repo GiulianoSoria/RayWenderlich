@@ -11,6 +11,9 @@ struct Item: Codable, Hashable {
     var id: String
     var type: String
     var attributes: Attribute
+    
+    var isDownloaded: Bool?
+    var isBookmarked: Bool?
 }
 
 struct SavedItem: Codable, Hashable {

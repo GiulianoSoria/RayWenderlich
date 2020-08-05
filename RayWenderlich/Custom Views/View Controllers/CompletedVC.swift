@@ -12,10 +12,10 @@ class CompletedVC: UIViewController {
     enum Section { case main }
     
     var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, SavedItem>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
-    static var items: [SavedItem] = []
-    var filteredItems: [SavedItem] = []
+    static var items: [Item] = []
+    var filteredItems: [Item] = []
     
     var isAdding: Bool = false
     var isRemoving: Bool = false
@@ -28,7 +28,7 @@ class CompletedVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with items: [SavedItem]) {
+    convenience init(with items: [Item]) {
         self.init(nibName: nil, bundle: nil)
         CompletedVC.items = MyTutorialsVC.completedItems
     }
@@ -63,7 +63,7 @@ class CompletedVC: UIViewController {
     }
     
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, SavedItem>(collectionView: collectionView, cellProvider: { collectionView, indexPath, item -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: { collectionView, indexPath, item -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCell.reuseID, for: indexPath) as! ItemCell
             cell.setPersistedCell(with: item)
             
@@ -71,7 +71,7 @@ class CompletedVC: UIViewController {
         })
     }
     
-    func updateUI(with completed: SavedItem) {
+    func updateUI(with completed: Item) {
         if isRemoving {
             CompletedVC.items.removeAll { $0.id == completed.id }
         } else if isAdding {
@@ -80,8 +80,8 @@ class CompletedVC: UIViewController {
         updateData(on: CompletedVC.items)
     }
     
-    func updateData(on completed: [SavedItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+    func updateData(on completed: [Item]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems(completed)
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
@@ -101,7 +101,7 @@ class CompletedVC: UIViewController {
         }
     }
     
-    func updateCompleted(with items: [SavedItem]) {
+    func updateCompleted(with items: [Item]) {
         for item in items {
             PersistenceManager.updateItems(for: Keys.completed, with: item, actionType: .add) { error in
                 guard let _ = error else {
@@ -133,8 +133,8 @@ extension CompletedVC: UICollectionViewDelegateFlowLayout {
 
 extension CompletedVC: MyTutorialsVCDelegate {
     
-    func updateData(with items: [SavedItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+    func updateData(with items: [Item]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
@@ -205,8 +205,8 @@ extension CompletedVC: UIContextMenuInteractionDelegate {
 }
 
 extension CompletedVC: BookmarksVCDelegate {
-    func updateData(on item: SavedItem) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+    func updateData(on item: Item) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems([item])
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }

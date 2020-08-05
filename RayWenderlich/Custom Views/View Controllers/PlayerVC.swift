@@ -10,7 +10,7 @@ import AVKit
 
 class PlayerVC: UIViewController {
     
-    var item: SavedItem!
+    var item: Item!
     
     var playerImageView = RWImageView(frame: .zero)
     var playButton = RWButton(title: nil, backgroundImage: Images.play, backgroundColor: .white, tintColor: .black)
@@ -23,7 +23,7 @@ class PlayerVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with item: SavedItem) {
+    convenience init(with item: Item) {
         self.init(nibName: nil, bundle: nil)
         self.item = item
     }
@@ -31,12 +31,27 @@ class PlayerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureViewController()
         layoutUI()
+    }
+    
+    func configureViewController() {
+        view.backgroundColor = .secondarySystemBackground
     }
     
     func layoutUI() {
         playerImageView.downloadImage(from: item.attributes.cardArtworkUrl)
         playerImageView.alpha = 0.5
+        playerImageView.layer.cornerRadius = 0
+        
+//        let gradient = CAGradientLayer()
+//        gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+//        gradient.endPoint = CGPoint(x: 0.5, y: 0.6)
+//        let whiteColor = UIColor.white
+//        gradient.colors = [whiteColor.withAlphaComponent(0.0).cgColor, whiteColor.withAlphaComponent(1.0).cgColor, whiteColor.withAlphaComponent(1.0).cgColor]
+//        gradient.locations = [NSNumber(value: 0.0),NSNumber(value: 0.2),NSNumber(value: 1.0)]
+//        gradient.frame = playerImageView.bounds
+//        playerImageView.layer.mask = gradient
         
         view.addSubview(playerImageView)
         playerImageView.pinToEdges(of: view)

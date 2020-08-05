@@ -9,7 +9,7 @@ import UIKit
 
 class ItemDetailVC: UIViewController {
     
-    var item: SavedItem!
+    var item: Item!
     
     var playerView = UIView()
     var courseInfoView = UIView()
@@ -22,7 +22,7 @@ class ItemDetailVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with item: SavedItem) {
+    convenience init(with item: Item) {
         self.init(nibName: nil, bundle: nil)
         self.item = item
     }
@@ -43,6 +43,7 @@ class ItemDetailVC: UIViewController {
     
     func configureViewController() {
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1)
     }
     
@@ -55,12 +56,12 @@ class ItemDetailVC: UIViewController {
             playerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            playerView.heightAnchor.constraint(equalToConstant: 250),
+            playerView.heightAnchor.constraint(equalToConstant: 300),
             
             courseInfoView.topAnchor.constraint(equalTo: playerView.bottomAnchor),
             courseInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             courseInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            courseInfoView.heightAnchor.constraint(equalToConstant: 300)
+            courseInfoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -68,7 +69,7 @@ class ItemDetailVC: UIViewController {
         self.add(childVC: PlayerVC(with: item), to: self.playerView)
     }
     
-    func configureCourseInfoVC(with item: SavedItem) {
+    func configureCourseInfoVC(with item: Item) {
         self.add(childVC: CourseInfoVC(with: item), to: self.courseInfoView)
     }
     

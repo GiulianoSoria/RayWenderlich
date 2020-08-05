@@ -42,7 +42,7 @@ class ItemCell: UICollectionViewCell {
         footerLabel.text = "\(item.attributes.releasedAt.convertToDate()!.convertToMonthDayYearFormat()) • \(item.attributes.contentType.localizedCapitalized) \(item.attributes.duration.convertToDuration())"
     }
     
-    func setPersistedCell(with item: SavedItem) {
+    func setPersistedCell(with item: Item) {
         contentView.backgroundColor = .systemBackground
         contentView.layer.cornerRadius = 5
         

@@ -9,7 +9,7 @@ import UIKit
 
 protocol MyTutorialsVCDelegate: class {
 //    var filteredItems: [SavedItem] { get set }
-    func updateData(with filter: [SavedItem])
+    func updateData(with filter: [Item])
 }
 
 class MyTutorialsVC: UIViewController {
@@ -21,10 +21,10 @@ class MyTutorialsVC: UIViewController {
     var completedView = UIView()
     var bookmarksView = UIView()
     
-    static var bookmarkedItems: [SavedItem] = []
-    static var completedItems: [SavedItem] = []
-    static var inProgressItems: [SavedItem] = []
-    var filteredItems : [SavedItem] = []
+    static var bookmarkedItems: [Item] = []
+    static var completedItems: [Item] = []
+    static var inProgressItems: [Item] = []
+    var filteredItems : [Item] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +38,7 @@ class MyTutorialsVC: UIViewController {
         configureBookmarksVC()
         configureInProgressVC()
         configureCompletedVC()
+        configureViewController()
     }
     
     func configureViewController() {
@@ -115,16 +116,19 @@ class MyTutorialsVC: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             inProgressView.isHidden = false
+            configureInProgressVC()
             completedView.isHidden = true
             bookmarksView.isHidden = true
         case 1:
             inProgressView.isHidden = true
             completedView.isHidden = false
+            configureCompletedVC()
             bookmarksView.isHidden = true
         default:
             inProgressView.isHidden = true
             completedView.isHidden = true
             bookmarksView.isHidden = false
+            configureBookmarksVC()
         }
     }
 }

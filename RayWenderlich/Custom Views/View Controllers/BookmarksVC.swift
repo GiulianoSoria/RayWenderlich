@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BookmarksVCDelegate: class {
-    func updateData(on item: SavedItem)
+    func updateData(on item: Item)
 }
 
 class BookmarksVC: UIViewController {
@@ -18,10 +18,10 @@ class BookmarksVC: UIViewController {
     weak var delegate: BookmarksVCDelegate!
     
     var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, SavedItem>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
-    static var items: [SavedItem] = []
-    var filteredItems: [SavedItem] = []
+    static var items: [Item] = []
+    var filteredItems: [Item] = []
     
     var isAdding: Bool = false
     var isRemoving: Bool = false
@@ -34,7 +34,7 @@ class BookmarksVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with items: [SavedItem]) {
+    convenience init(with items: [Item]) {
         self.init(nibName: nil, bundle: nil)
         BookmarksVC.items = MyTutorialsVC.bookmarkedItems
     }
@@ -69,7 +69,7 @@ class BookmarksVC: UIViewController {
     }
     
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, SavedItem>(collectionView: collectionView, cellProvider: { collectionView, indexPath, item -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: { collectionView, indexPath, item -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCell.reuseID, for: indexPath) as! ItemCell
             cell.setPersistedCell(with: item)
             
@@ -77,7 +77,7 @@ class BookmarksVC: UIViewController {
         })
     }
     
-    func updateUI(with bookmark: SavedItem) {
+    func updateUI(with bookmark: Item) {
         if isRemoving {
             BookmarksVC.items.removeAll { $0.id == bookmark.id }
         } else if isAdding {
@@ -86,8 +86,8 @@ class BookmarksVC: UIViewController {
         updateData(on: BookmarksVC.items)
     }
     
-    func updateData(on bookmarks: [SavedItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+    func updateData(on bookmarks: [Item]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems(bookmarks)
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
@@ -107,7 +107,7 @@ class BookmarksVC: UIViewController {
         }
     }
     
-    func updateBookmarks(with items: [SavedItem]) {
+    func updateBookmarks(with items: [Item]) {
         for item in items {
             PersistenceManager.updateItems(for: Keys.downloads, with: item, actionType: .add) { error in
                 guard let _ = error else {
@@ -139,8 +139,8 @@ extension BookmarksVC: UICollectionViewDelegateFlowLayout {
 
 extension BookmarksVC: MyTutorialsVCDelegate {
     
-    func updateData(with items: [SavedItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, SavedItem>()
+    func updateData(with items: [Item]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
         DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
@@ -205,7 +205,8 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
 
             
             let remove = UIAction(title: "Remove from Bookmarks", image: Images.removeBookmark, attributes: .destructive) { action in
-                PersistenceManager.updateItems(for: Keys.bookmarks, with: bookmark, actionType: .remove) { [weak self] error in
+                let updatedBookmark = Item(id: bookmark.id, type: bookmark.type, attributes: bookmark.attributes, isDownloaded: bookmark.isDownloaded!, isBookmarked: false)
+                PersistenceManager.updateItems(for: Keys.bookmarks, with: updatedBookmark, actionType: .remove) { [weak self] error in
                     guard let self = self else { return }
                     
                     self.isRemoving = true
@@ -221,7 +222,9 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
                 }
             }
             
-            return UIMenu(title: "Menu", children: [completed, share, remove])
+            let destructive = UIMenu(title: "Remove", image: nil, options: .displayInline, children: [remove])
+            
+            return UIMenu(title: "Menu", children: [completed, share, destructive])
         }
             
         return configuration

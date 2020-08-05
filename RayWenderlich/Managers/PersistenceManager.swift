@@ -13,7 +13,7 @@ enum PersistenceManager {
     
     static private let defaults = UserDefaults.standard
     
-    static func retreiveItems(for key: String, completed: @escaping (Result<[SavedItem], RWError>) -> Void) {
+    static func retreiveItems(for key: String, completed: @escaping (Result<[Item], RWError>) -> Void) {
         guard let itemsData = defaults.object(forKey: key) as? Data else {
             completed(.success([]))
             return
@@ -21,14 +21,14 @@ enum PersistenceManager {
         
         do {
             let decoder = JSONDecoder()
-            let items = try decoder.decode([SavedItem].self, from: itemsData)
+            let items = try decoder.decode([Item].self, from: itemsData)
             completed(.success(items))
         } catch {
             completed(.failure(.unableToRetreiveItems))
         }
     }
     
-    static func saveItems(for key: String, _ items: [SavedItem]) -> RWError? {
+    static func saveItems(for key: String, _ items: [Item]) -> RWError? {
         do {
             let encoder = JSONEncoder()
             let encodedItems = try encoder.encode(items)
@@ -39,7 +39,7 @@ enum PersistenceManager {
         }
     }
     
-    static func updateItems(for key: String, with item: SavedItem, actionType: PersistenceActionType, completed: @escaping (RWError?) -> Void) {
+    static func updateItems(for key: String, with item: Item, actionType: PersistenceActionType, completed: @escaping (RWError?) -> Void) {
         retreiveItems(for: key) { result in
             switch result {
             case .success(var items):
