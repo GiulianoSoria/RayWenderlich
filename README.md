@@ -1,11 +1,7 @@
-# RayWenderlich
+# RayWenderlich Practical Example
 
 ## About 
 RayWenderlich iOS Interview Practice Project
-
-## Screenshots
-
-![Mockup with screenshots of the app](https://i.imgur.com/FcPnnah.jpg)
 
 ## API used
 
@@ -16,3 +12,7 @@ RayWenderlich iOS Interview Practice Project
 - UI built 100% programmatically
 - No third-party libraries
 - Image caching
+
+## Screenshots
+
+![Mockup with screenshots of the app](https://i.imgur.com/FcPnnah.jpg)
