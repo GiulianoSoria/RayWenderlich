@@ -5,7 +5,7 @@ RayWenderlich iOS Interview Practice Project
 
 ## Screenshots
 
-![Mockup with screenshots of the app](https://i.imgur.com/6w7duld.jpg)
+![Mockup with screenshots of the app](https://i.imgur.com/FcPnnah.jpg)
 
 ## API used
 
