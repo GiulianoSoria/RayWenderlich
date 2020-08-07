@@ -14,6 +14,8 @@ struct Item: Codable, Hashable {
     
     var isDownloaded: Bool?
     var isBookmarked: Bool?
+    var isInProgress: Bool?
+    var isCompleted: Bool?
 }
 
 struct SavedItem: Codable, Hashable {

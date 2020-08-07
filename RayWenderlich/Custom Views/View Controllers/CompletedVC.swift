@@ -20,19 +20,15 @@ class CompletedVC: UIViewController {
     var isAdding: Bool = false
     var isRemoving: Bool = false
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(with items: [Item]) {
+        super.init(nibName: nil, bundle: nil)
+        CompletedVC.items = MyTutorialsVC.completedItems
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with items: [Item]) {
-        self.init(nibName: nil, bundle: nil)
-        CompletedVC.items = MyTutorialsVC.completedItems
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -94,7 +90,7 @@ class CompletedVC: UIViewController {
             switch result {
             case .success(let completed):
                 CompletedVC.items = completed
-                self.updateData(with: completed)
+                self.updateData(on: completed)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
             }
@@ -131,36 +127,6 @@ extension CompletedVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CompletedVC: MyTutorialsVCDelegate {
-    
-    func updateData(with items: [Item]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(items)
-        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
-        updateCompleted(with: items)
-    }
-}
-
-//extension CompletedVC: UISearchBarDelegate {
-//
-//}
-//
-//extension CompletedVC: UISearchResultsUpdating {
-//    func updateSearchResults(for searchController: UISearchController) {
-//        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
-//            filteredItems.removeAll()
-//            updateData(with: CompletedVC.items)
-//            return
-//        }
-//
-//        filteredItems = CompletedVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
-//        updateData(with: filteredItems)
-//    }
-//
-//
-//}
-
 extension CompletedVC: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return nil
@@ -173,10 +139,7 @@ extension CompletedVC: UIContextMenuInteractionDelegate {
             let share = UIAction(title: "Share Link", image: Images.share) { [weak self] action in
                 guard let self = self else { return }
                 
-                let activityViewController = UIActivityViewController(activityItems: [completed.attributes.uri], applicationActivities: nil)
-                activityViewController.popoverPresentationController?.sourceView = self.collectionView.cellForItem(at: indexPath)
-                activityViewController.isModalInPresentation = true
-                self.present(activityViewController, animated: true)
+                DispatchQueue.main.async { UIHelper.createActivityController(for: completed, collectionView: self.collectionView, indexPath: indexPath, for: self) }
             }
 
             
@@ -201,14 +164,5 @@ extension CompletedVC: UIContextMenuInteractionDelegate {
         }
             
         return configuration
-    }
-}
-
-extension CompletedVC: BookmarksVCDelegate {
-    func updateData(on item: Item) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems([item])
-        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
     }
 }

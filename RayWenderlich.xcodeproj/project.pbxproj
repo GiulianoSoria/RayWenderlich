@@ -93,6 +93,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F26D80F124DCDB1A0034342C /* ItemDetailsVCs */ = {
+			isa = PBXGroup;
+			children = (
+				F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */,
+				F28F4A5824D64FB600313EA9 /* PlayerVC.swift */,
+			);
+			path = ItemDetailsVCs;
+			sourceTree = "<group>";
+		};
 		F28F4A0424D5DD0D00313EA9 = {
 			isa = PBXGroup;
 			children = (
@@ -237,8 +246,7 @@
 		F28F4A5324D64BF500313EA9 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				F28F4A5424D64CBB00313EA9 /* CourseInfoVC.swift */,
-				F28F4A5824D64FB600313EA9 /* PlayerVC.swift */,
+				F26D80F124DCDB1A0034342C /* ItemDetailsVCs */,
 				F252C4CC24D70C4B00E543A0 /* BookmarksVC.swift */,
 				F28668D024D8AFC40024353B /* InProgressVC.swift */,
 				F28668D224D8AFCD0024353B /* CompletedVC.swift */,

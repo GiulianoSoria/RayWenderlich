@@ -7,15 +7,9 @@
 
 import UIKit
 
-protocol BookmarksVCDelegate: class {
-    func updateData(on item: Item)
-}
-
 class BookmarksVC: UIViewController {
 
     enum Section { case main }
-    
-    weak var delegate: BookmarksVCDelegate!
     
     var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
@@ -26,18 +20,15 @@ class BookmarksVC: UIViewController {
     var isAdding: Bool = false
     var isRemoving: Bool = false
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(with items: [Item]) {
+        super.init(nibName: nil, bundle: nil)
+        BookmarksVC.items = MyTutorialsVC.bookmarkedItems
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(with items: [Item]) {
-        self.init(nibName: nil, bundle: nil)
-        BookmarksVC.items = MyTutorialsVC.bookmarkedItems
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +40,9 @@ class BookmarksVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        configureViewController()
+        configureCollectionView()
+        configureDataSource()
         getBookmarks()
     }
     
@@ -85,6 +79,10 @@ class BookmarksVC: UIViewController {
         }
         updateData(on: BookmarksVC.items)
     }
+
+    func update(with filter: String) {
+        print(BookmarksVC.items.removeAll { $0.attributes.name.lowercased() != filter.lowercased() })
+    }
     
     func updateData(on bookmarks: [Item]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
@@ -100,12 +98,13 @@ class BookmarksVC: UIViewController {
             switch result {
             case .success(let bookmarks):
                 BookmarksVC.items = bookmarks
-                self.updateData(with: bookmarks)
+                self.updateData(on: bookmarks)
             case .failure(let error):
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
             }
         }
     }
+    
     
     func updateBookmarks(with items: [Item]) {
         for item in items {
@@ -137,36 +136,6 @@ extension BookmarksVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension BookmarksVC: MyTutorialsVCDelegate {
-    
-    func updateData(with items: [Item]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(items)
-        DispatchQueue.main.async { self.dataSource.apply(snapshot, animatingDifferences: true) }
-        updateBookmarks(with: items)
-    }
-}
-
-//extension BookmarksVC: UISearchBarDelegate {
-//
-//}
-//
-//extension BookmarksVC: UISearchResultsUpdating {
-//    func updateSearchResults(for searchController: UISearchController) {
-//        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
-//            filteredItems.removeAll()
-//            updateData(with: BookmarksVC.items)
-//            return
-//        }
-//
-//        filteredItems = BookmarksVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
-//        updateData(with: filteredItems)
-//    }
-//
-//
-//}
-
 extension BookmarksVC: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return nil
@@ -185,7 +154,7 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
                     self.isAdding = true
                     
                     guard let error = error else {
-                        DispatchQueue.main.async { UIHelper.createAlertController(title: "Added!", message: "Successfully added from completed!", in: self) }
+                        DispatchQueue.main.async { UIHelper.createAlertController(title: "Added!", message: "Successfully added to completed!", in: self) }
                         self.isAdding = false
                         return
                     }
@@ -194,13 +163,10 @@ extension BookmarksVC: UIContextMenuInteractionDelegate {
                 }
             }
             
-            let share = UIAction(title: "Share Link", image: Images.share) { [weak self] action in
+            let share = UIAction(title: "Share Link", image: Images.share) { [weak self] _ in
                 guard let self = self else { return }
                 
-                let activityViewController = UIActivityViewController(activityItems: [bookmark.attributes.uri], applicationActivities: nil)
-                activityViewController.popoverPresentationController?.sourceView = self.collectionView.cellForItem(at: indexPath)
-                activityViewController.isModalInPresentation = true
-                self.present(activityViewController, animated: true)
+                DispatchQueue.main.async { UIHelper.createActivityController(for: bookmark, collectionView: self.collectionView, indexPath: indexPath, for: self) }
             }
 
             

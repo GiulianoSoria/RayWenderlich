@@ -76,8 +76,7 @@ class LibraryVC: UIViewController {
         view.addSubview(sortButton)
         
         sortButton.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
-        
-        
+
         let padding: CGFloat = 10
         
         NSLayoutConstraint.activate([
@@ -270,6 +269,8 @@ extension LibraryVC: UICollectionViewDelegateFlowLayout {
 extension LibraryVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         var activeItems: [Item] = []
+        sortButton.isHidden = true
+        sortButton.isUserInteractionEnabled = false
         
         if isFiltered {
             activeItems = filteredItems
@@ -289,6 +290,13 @@ extension LibraryVC: UISearchResultsUpdating {
         isSearching = true
         filteredItems = activeItems.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
         updateData(with: filteredItems)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        DispatchQueue.main.async {
+            self.sortButton.isHidden = false
+            self.sortButton.isUserInteractionEnabled = true
+        }
     }
 }
 

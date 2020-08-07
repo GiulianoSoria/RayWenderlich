@@ -175,10 +175,7 @@ extension DownloadsVC: UIContextMenuInteractionDelegate {
             let share = UIAction(title: "Share Link", image: Images.share) { [weak self] action in
                 guard let self = self else { return }
                 
-                let activityViewController = UIActivityViewController(activityItems: [download.attributes.uri], applicationActivities: nil)
-                activityViewController.popoverPresentationController?.sourceView = self.collectionView.cellForItem(at: indexPath)
-                activityViewController.isModalInPresentation = true
-                self.present(activityViewController, animated: true)
+                DispatchQueue.main.async { UIHelper.createActivityController(for: download, collectionView: self.collectionView, indexPath: indexPath, for: self) }
             }
 
             

@@ -14,17 +14,13 @@ class ItemDetailVC: UIViewController {
     var playerView = UIView()
     var courseInfoView = UIView()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(with item: Item) {
+        super.init(nibName: nil, bundle: nil)
+        self.item = item
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    convenience init(with item: Item) {
-        self.init(nibName: nil, bundle: nil)
-        self.item = item
     }
 
     override func viewDidLoad() {
@@ -34,11 +30,7 @@ class ItemDetailVC: UIViewController {
         configureCourseInfoVC(with: item)
         configurePlayerVC()
         layoutUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        getDownload()
-        getBookmark()
+        addToInProgress()
     }
     
     func configureViewController() {
@@ -73,40 +65,18 @@ class ItemDetailVC: UIViewController {
         self.add(childVC: CourseInfoVC(with: item), to: self.courseInfoView)
     }
     
-    func getDownload() {
-        PersistenceManager.retreiveItems(for: Keys.downloads) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let downloads):
-                for download in downloads {
-                    if download.id == self.item.id {
-                        self.item.isDownloaded = true
-                        self.configureCourseInfoVC(with: download)
-                    }
+    func addToInProgress() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            PersistenceManager.updateItems(for: Keys.inProgress, with: self.item, actionType: .add) { [weak self] error in
+                guard let self = self else { return }
+                
+                guard let error = error else {
+                    DispatchQueue.main.async { UIHelper.createAlertController(title: "Added!", message: "Successfully added to in progress!", in: self) }
+                    return
                 }
-            case .failure(let error):
+                
                 DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
             }
         }
     }
-    
-    func getBookmark() {
-        PersistenceManager.retreiveItems(for: Keys.bookmarks) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let bookmarks):
-                for bookmark in bookmarks {
-                    if bookmark.id == self.item.id {
-                        self.item.isBookmarked = true
-                        self.configureCourseInfoVC(with: bookmark)
-                    }
-                }
-            case .failure(let error):
-                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error!", message: error.rawValue, in: self) }
-            }
-        }
-    }
 }
-

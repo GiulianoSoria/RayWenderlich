@@ -7,14 +7,7 @@
 
 import UIKit
 
-protocol MyTutorialsVCDelegate: class {
-//    var filteredItems: [SavedItem] { get set }
-    func updateData(with filter: [Item])
-}
-
 class MyTutorialsVC: UIViewController {
-    
-    weak var delegate: MyTutorialsVCDelegate!
     
     var segmentedControl: UISegmentedControl!
     var inProgressView = UIView()
@@ -25,7 +18,11 @@ class MyTutorialsVC: UIViewController {
     static var completedItems: [Item] = []
     static var inProgressItems: [Item] = []
     var filteredItems : [Item] = []
+    var items: [Item] = []
 
+    var isFiltered: Bool = false
+    var isSearching: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,10 +32,13 @@ class MyTutorialsVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        configureBookmarksVC()
-        configureInProgressVC()
-        configureCompletedVC()
+        configureBookmarksVC(with: MyTutorialsVC.bookmarkedItems)
+        configureInProgressVC(with: MyTutorialsVC.inProgressItems)
+        configureCompletedVC(with: MyTutorialsVC.completedItems)
         configureViewController()
+        
+        getCompleted()
+        getBookmarks()
     }
     
     func configureViewController() {
@@ -46,14 +46,26 @@ class MyTutorialsVC: UIViewController {
         navigationController?.navigationBar.tintColor = .secondaryLabel
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        let settingsButton = UIBarButtonItem(image: Images.settings, style: .done, target: self, action: #selector(settingsButtonTapped))
+        let changeUsername = UIAction(title: "Change username", image: Images.username) { action in
+            print(action.title)
+        }
+        
+        let changeProfilePicture = UIAction(title: "Change profile picture", image: Images.profilePicture) { action in
+            print(action.title)
+        }
+        
+        let logOut = UIAction(title: "Log Out", image: Images.logOut, attributes: .destructive) { action in
+            print(action.title)
+        }
+        
+        let logOutMenu = UIMenu(title: "", options: .displayInline, children: [logOut])
+        
+        let settingsMenu = UIMenu(title: "Settings", options: .displayInline, children: [changeUsername, changeProfilePicture, logOutMenu])
+        
+        let settingsButton = UIBarButtonItem(title: nil, image: Images.settings, menu: settingsMenu)
         navigationItem.rightBarButtonItem = settingsButton
     }
-    
-    @objc func settingsButtonTapped() {
         
-    }
-    
     func layoutUI() {
         view.addSubviews(
             inProgressView,
@@ -82,16 +94,16 @@ class MyTutorialsVC: UIViewController {
         ])
     }
     
-    func configureBookmarksVC() {
-        self.add(childVC: BookmarksVC(with: MyTutorialsVC.bookmarkedItems), to: self.bookmarksView)
+    func configureBookmarksVC(with bookmarks: [Item]) {
+        self.add(childVC: BookmarksVC(with: bookmarks), to: self.bookmarksView)
     }
     
-    func configureInProgressVC() {
+    func configureInProgressVC(with inProgress: [Item]) {
         self.add(childVC: InProgressVC(), to: self.inProgressView)
     }
     
-    func configureCompletedVC() {
-        self.add(childVC: CompletedVC(with: MyTutorialsVC.completedItems), to: self.completedView)
+    func configureCompletedVC(with completed: [Item]) {
+        self.add(childVC: CompletedVC(with: completed), to: self.completedView)
     }
     
     func configureSegmentedControl() {
@@ -116,42 +128,52 @@ class MyTutorialsVC: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             inProgressView.isHidden = false
-            configureInProgressVC()
+            items = MyTutorialsVC.inProgressItems
+            configureInProgressVC(with: items)
+            
             completedView.isHidden = true
             bookmarksView.isHidden = true
         case 1:
             inProgressView.isHidden = true
+            
             completedView.isHidden = false
-            configureCompletedVC()
+            items = MyTutorialsVC.completedItems
+            configureCompletedVC(with: items)
+            
             bookmarksView.isHidden = true
         default:
             inProgressView.isHidden = true
             completedView.isHidden = true
+            
             bookmarksView.isHidden = false
-            configureBookmarksVC()
+            items = MyTutorialsVC.bookmarkedItems
+            configureBookmarksVC(with: items)
         }
     }
-}
-
-extension MyTutorialsVC: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
-            filteredItems.removeAll()
-            delegate.updateData(with: BookmarksVC.items)
-            return
+    
+    func getBookmarks() {
+        PersistenceManager.retreiveItems(for: Keys.bookmarks) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let bookmarks):
+                MyTutorialsVC.bookmarkedItems = bookmarks
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
         }
-        
-        filteredItems = BookmarksVC.items.filter { $0.attributes.name.lowercased().contains(filter.lowercased()) }
-        delegate.updateData(with: filteredItems)
     }
-}
-
-extension MyTutorialsVC: UISearchBarDelegate {
-    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        let destVC = FiltersVC()
-        destVC.title = "Filters"
-        
-        let navController = UINavigationController(rootViewController: destVC)
-        present(navController, animated: true)
+    
+    func getCompleted() {
+        PersistenceManager.retreiveItems(for: Keys.completed) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let completed):
+                MyTutorialsVC.completedItems = completed
+            case .failure(let error):
+                DispatchQueue.main.async { UIHelper.createAlertController(title: "Error", message: error.rawValue, in: self) }
+            }
+        }
     }
 }

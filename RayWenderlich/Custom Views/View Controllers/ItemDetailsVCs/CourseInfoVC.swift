@@ -19,16 +19,8 @@ class CourseInfoVC: UIViewController {
     var descriptionLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
     var contributorLabel = RWLabel(textAlignment: .left, fontSize: 14, weight: .regular, textColor: .secondaryLabel)
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    convenience init(with item: Item) {
-        self.init(nibName: nil, bundle: nil)
+    init(with item: Item) {
+        super.init(nibName: nil, bundle: nil)
         self.item = item
         
         technologyLabel.text = item.attributes.technologyTripleString.uppercased()
@@ -44,6 +36,10 @@ class CourseInfoVC: UIViewController {
         
         downloadButton.set(tintColor: item.isDownloaded! ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
         bookmarkButton.set(tintColor: item.isBookmarked! ? UIColor(hue:0.365, saturation:0.527, brightness:0.506, alpha:1) : .secondaryLabel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
