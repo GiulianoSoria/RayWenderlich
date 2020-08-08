@@ -15,4 +15,4 @@ RayWenderlich iOS Interview Practice Project
 
 ## Screenshots
 
-![Mockup with screenshots of the app](https://i.imgur.com/FcPnnah.jpg)
+![Mockup with screenshots of the app](https://i.imgur.com/Ogkp7gM.jpg)
