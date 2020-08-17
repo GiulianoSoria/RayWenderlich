@@ -15,8 +15,4 @@ RayWenderlich iOS Interview Practice Project
 
 ## Screenshots
 
-### iPhone
-![iPhone mockup with screenshots of the app](https://i.imgur.com/rlzgMQ5.jpg)
-
-### iPad
-![iPad mockup with screenshots of the app](https://i.imgur.com/NoLsvWp.png)
+![iPhone and iPad mockup with screenshots of the app](https://i.imgur.com/xrTgUi1.png)
